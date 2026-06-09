@@ -52,18 +52,31 @@
     btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
   });
 
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz8WieYH1MFfKF-lGDynzvPi5acsn3fDUwC0CsnmRkoUYWzxLyltf9o9WcDuOSSEMD-Uw/exec';
+
   /* ---------- main form submit ---------- */
-  function wireForm(formId, btnId, successHTML) {
+  function wireForm(formId, btnId, successHTML, formularioNombre) {
     const form = document.getElementById(formId);
     if (!form) return;
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById(btnId);
-      const prev = btn.textContent;
       btn.textContent = 'Enviando…';
       btn.disabled = true;
-      // INTEGRACIÓN: conectar a Supabase / Google Sheets / serverless aquí.
-      await new Promise((r) => setTimeout(r, 1100));
+
+      const fields = {};
+      new FormData(form).forEach((val, key) => { fields[key] = val; });
+      fields.formulario = formularioNombre;
+
+      try {
+        await fetch(SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fields)
+        });
+      } catch (_) {}
+
       form.innerHTML = successHTML;
     });
   }
@@ -73,14 +86,14 @@
       <span class="mono">Solicitud recibida</span>
       <h3>Lo que sucede aquí,<br>se queda aquí.</h3>
       <p>Tu solicitud está siendo revisada.<br>Si encajas con la visión de Habitat, te contactaremos.</p>
-    </div>`);
+    </div>`, 'Habitat');
 
   wireForm('form023', 'submit023', `
     <div class="form-success">
       <span class="mono" style="color:var(--red);">En la lista</span>
       <h3>Nos vemos en la fila.</h3>
       <p>Tu nombre entra a la lista de 023.<br>El cupo es limitado. Si quedas, recibes la dirección.</p>
-    </div>`);
+    </div>`, '023');
 
   /* ---------- 023 unlock ---------- */
   const gate = document.getElementById('zero23Gate');
