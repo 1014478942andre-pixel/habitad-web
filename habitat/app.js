@@ -52,7 +52,7 @@
     btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
   });
 
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx6ixIW3Z2WU3unq10QfAFE4b6AqEkJ4OUyiYQIs7UNU4mPqroDoS2FywAt_1i3R6N6Sg/exec';
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxr3OECy9gjukBvQo4K4VCxjtov79AXnU8YSaxrYOyFdpScswnyR1LDVeCk3zzd-VBGmw/exec';
 
   /* ---------- main form submit ---------- */
   function wireForm(formId, btnId, successHTML, formularioNombre) {
